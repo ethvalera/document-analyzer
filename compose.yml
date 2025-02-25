@@ -2,7 +2,7 @@ name: docanalyzer
 
 services:
   db:
-    image: postgres:14-alpine
+    image: postgres:17-alpine
     volumes:
       - pg_doc_analyzer_data:/var/lib/postgresql/data
     environment:
