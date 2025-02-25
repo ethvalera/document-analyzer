@@ -1,0 +1,44 @@
+name: docanalyzer
+
+services:
+  db:
+    image: postgres:14-alpine
+    volumes:
+      - pg_doc_analyzer_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: doc-analyzer-user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB: doc_analyzer_db
+    ports:
+      - "5432:5432"
+    secrets:
+      - db_password
+    networks:
+      - app-pg-network
+  app:
+    image: doc-analyzer
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    ports:
+      - "8080:8080"
+    networks:
+      - app-pg-network
+
+secrets:
+  db_password:
+    file: db_password.txt
+
+volumes:
+  pg_doc_analyzer_data:
+
+networks:
+  app-pg-network:
+
+
