@@ -1,6 +1,7 @@
 package com.visiblethread.docanalyzer.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 
@@ -10,9 +11,9 @@ import lombok.Data;
 public class TeamEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @NotNull
     private String name;
 }

@@ -1,0 +1,14 @@
+name: Create team
+request:
+  method: POST
+  url: /api/v1/teams
+  headers:
+    Content-Type: application/json
+  body:
+    name: ""
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+    message: "The name cannot be empty or null"

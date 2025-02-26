@@ -1,5 +1,6 @@
 package com.visiblethread.docanalyzer.service;
 
+import com.visiblethread.docanalyzer.model.CreateTeamRequest;
 import com.visiblethread.docanalyzer.model.Team;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,20 @@ public class TeamMapperTest {
     private TeamMapper teamMapper;
 
     @Test
-    public void testToTeam_success() {
+    public void testTeamEntityToTeam() {
         TeamEntity teamEntity = createTeamEntityWithName(TEAM_1_NAME);
         Team team = teamMapper.toTeam(teamEntity);
+
         assertEquals(teamEntity.getName(), team.getName());
         assertEquals(teamEntity.getId(), team.getId());
+    }
+
+    @Test
+    public void testCreateTeamRequestToTeamEntity() {
+        CreateTeamRequest createTeamRequest = new CreateTeamRequest(TEAM_1_NAME);
+        TeamEntity teamEntity = teamMapper.toTeamEntity(createTeamRequest);
+
+        assertEquals(createTeamRequest.getName(), teamEntity.getName());
     }
 
 }

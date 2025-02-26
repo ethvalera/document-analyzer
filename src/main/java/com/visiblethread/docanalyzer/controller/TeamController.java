@@ -1,5 +1,6 @@
 package com.visiblethread.docanalyzer.controller;
 
+import com.visiblethread.docanalyzer.model.CreateTeamRequest;
 import com.visiblethread.docanalyzer.service.TeamService;
 import com.visiblethread.docanalyzer.model.Team;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,5 +22,10 @@ public class TeamController implements TeamsApi {
     @Override
     public ResponseEntity<List<Team>> getAllTeams() {
         return new ResponseEntity<>(teamService.getAllTeams(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Team> createTeam(CreateTeamRequest createTeamRequest) {
+        return new ResponseEntity<>(teamService.createTeam(createTeamRequest), HttpStatus.CREATED);
     }
 }

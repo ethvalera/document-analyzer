@@ -17,12 +17,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
-import static com.visiblethread.docanalyzer.utils.Constants.TEAM_1_NAME;
-import static com.visiblethread.docanalyzer.utils.Constants.TEAM_2_NAME;
+import static com.visiblethread.docanalyzer.utils.Constants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.createTeamEntityWithName;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -63,6 +63,28 @@ public class TeamControllerIntegrationTest {
         mockMvc.perform(get("/api/v1/teams"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.message").value("An unexpected error occurred"));
+    }
+
+    @Test
+    public void testCreateTeam_success() throws Exception {
+        final String requestBody = "{\"name\": \"" + TEAM_3_NAME + "\"}";
+        mockMvc.perform(post("/api/v1/teams")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.name").value(TEAM_3_NAME));
+    }
+
+    @Test
+    public void testCreateTeam_badRequest() throws Exception {
+        final String requestBody = "{\"name\": \" \"}";
+        mockMvc.perform(post("/api/v1/teams")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").value("Team name cannot be empty or null"));
     }
 
 }

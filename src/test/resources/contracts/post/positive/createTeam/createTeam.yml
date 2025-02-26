@@ -1,0 +1,15 @@
+name: Create team
+request:
+  method: POST
+  url: /api/v1/teams
+  headers:
+    Content-Type: application/json
+  body:
+    name: "Healthcare"
+response:
+  status: 201
+  headers:
+    Content-Type: application/json
+  body:
+    id: 1
+    name: "Healthcare"

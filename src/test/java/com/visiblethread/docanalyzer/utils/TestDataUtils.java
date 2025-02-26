@@ -13,6 +13,13 @@ public final class TestDataUtils {
         return teamEntity;
     }
 
+    public static TeamEntity createTeamEntityWithIdAndName(Long id, String name) {
+        TeamEntity teamEntity = new TeamEntity();
+        teamEntity.setId(id);
+        teamEntity.setName(name);
+        return teamEntity;
+    }
+
     public static Team createTeamWithName(String name) {
         Team team = new Team();
         team.setName(name);
