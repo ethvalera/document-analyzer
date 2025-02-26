@@ -28,6 +28,21 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<postgresql.version>42.7.5</postgresql.version>
+		<flyway-core.version>11.3.3</flyway-core.version>
+		<flyway-postgresql.version>11.3.3</flyway-postgresql.version>
+		<openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
+		<swagger-annotations.version>2.2.28</swagger-annotations.version>
+		<swagger-core-jakarta.version>2.2.28</swagger-core-jakarta.version>
+		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+		<mapstruct-version>1.6.3</mapstruct-version>
+		<mapstruct-processor.version>1.6.3</mapstruct-processor.version>
+		<spring-cloud-starter-contract.version>4.1.4</spring-cloud-starter-contract.version>
+		<spring-cloud-starter-contract-stub-runner.version>4.1.4</spring-cloud-starter-contract-stub-runner.version>
+		<rest-assured.version>5.4.0</rest-assured.version>
+		<mockito-core.version>5.11.0</mockito-core.version>
+		<mockito-junit.version>5.11.0</mockito-junit.version>
+		<rest-assured.version>5.4.0</rest-assured.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -47,17 +62,49 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.7.5</version>
+			<version>${postgresql.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-core</artifactId>
-			<version>11.3.3</version>
+			<version>${flyway-core.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
-			<version>11.3.3</version>
+			<version>${flyway-postgresql.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<version>${swagger-annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.swagger.core.v3</groupId>
+			<artifactId>swagger-core-jakarta</artifactId>
+			<version>${swagger-core-jakarta.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>${jackson-databind-nullable.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${mapstruct-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct-processor.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-contract-verifier</artifactId>
+			<version>${spring-cloud-starter-contract.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -67,6 +114,24 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>${mockito-core.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-junit-jupiter</artifactId>
+			<version>${mockito-junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -82,6 +147,11 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct-processor.version}</version>
+						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
@@ -95,6 +165,61 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>${openapi-generator-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>1</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir/src/main/resources/docanalyzer-openapi.yaml}</inputSpec>
+							<generatorName>html</generatorName>
+							<output>${project.build.directory}/generated-docs</output>
+						</configuration>
+					</execution>
+					<execution>
+						<id>2</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir/src/main/resources/docanalyzer-openapi.yaml}</inputSpec>
+							<generatorName>spring</generatorName>
+							<configOptions>
+								<generateSupportingFiles>false</generateSupportingFiles>
+								<sourceFolder>src/main/java</sourceFolder>
+								<interfaceOnly>true</interfaceOnly>
+								<skipOverwrite>false</skipOverwrite>
+								<skipDefaultInterface>true</skipDefaultInterface>
+								<useTags>true</useTags>
+								<useBeanValidation>true</useBeanValidation>
+								<useSpringBoot3>true</useSpringBoot3>
+								<useJakartaEe>true</useJakartaEe>
+							</configOptions>
+							<globalProperties>
+								<skipFormModel>false</skipFormModel>
+							</globalProperties>
+							<apiPackage>com.visiblethread.docanalyzer.api</apiPackage>
+							<modelPackage>com.visiblethread.docanalyzer.model</modelPackage>
+							<modelNamePrefix/>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
+				<version>4.0.3</version>
+				<extensions>true</extensions>
+				<configuration>
+					<testFramework>JUNIT5</testFramework>
+					<packageWithBaseClasses>com.visiblethread.docanalyzer.contracts</packageWithBaseClasses>
 				</configuration>
 			</plugin>
 		</plugins>

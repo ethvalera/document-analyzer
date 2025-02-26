@@ -1,0 +1,13 @@
+name: Get all teams
+request:
+  method: GET
+  url: /api/v1/teams
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    - id: 1
+      name: "Healthcare"
+    - id: 2
+      name: "Finance"
