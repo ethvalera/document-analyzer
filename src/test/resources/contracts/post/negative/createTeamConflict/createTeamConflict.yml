@@ -1,0 +1,14 @@
+name: Create team Conflict
+request:
+  method: POST
+  url: /api/v1/teams
+  headers:
+    Content-Type: application/json
+  body:
+    name: "RepeatedTeam"
+response:
+  status: 409
+  headers:
+    Content-Type: application/json
+  body:
+    message: "Team name RepeatedTeam already exists"

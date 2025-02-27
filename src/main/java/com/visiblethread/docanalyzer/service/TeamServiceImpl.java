@@ -38,7 +38,7 @@ public class TeamServiceImpl implements TeamService {
 
     private void validateTeamName(String name) {
         if(teamRepository.existsByName(name)){
-            throw new DocAnalyzerException(HttpStatus.BAD_REQUEST, "Team name " + name + " already exists");
+            throw new DocAnalyzerException(HttpStatus.CONFLICT, "Team name " + name + " already exists");
         }
         if(name == null || name.trim().isEmpty()) {
             throw new DocAnalyzerException(HttpStatus.BAD_REQUEST, "Team name cannot be empty or null");

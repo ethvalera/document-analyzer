@@ -72,7 +72,7 @@ public class TeamServiceTest {
         when(teamRepository.existsByName(TEAM_3_NAME)).thenReturn(true);
 
         DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> teamService.createTeam(createTeamRequest));
-        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+        assertEquals(HttpStatus.CONFLICT, exception.getStatus());
         assertEquals("Team name " + TEAM_3_NAME + " already exists", exception.getMessage());
     }
 
