@@ -1,0 +1,24 @@
+name: Create user
+request:
+  method: POST
+  url: /api/v1/users
+  headers:
+    Content-Type: application/json
+  body:
+    email: "elisabeth@gmail.com"
+    teams:
+      - "Healthcare"
+      - "Finance"
+response:
+  status: 201
+  headers:
+    Content-Type: application/json
+  body:
+    id: 1
+    email: "elisabeth@gmail.com"
+    createdAt: "2025-02-24T12:00:00Z"
+    teams:
+      - id: 1
+        name: "Healthcare"
+      - id: 2
+        name: "Finance"

@@ -1,0 +1,17 @@
+name: Create user Bad Request
+request:
+  method: POST
+  url: /api/v1/users
+  headers:
+    Content-Type: application/json
+  body:
+    email: ""
+    teams:
+      - "Healthcare"
+      - "Finance"
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+    message: "The email cannot be empty or null"

@@ -1,0 +1,17 @@
+name: Create user Conflict
+request:
+  method: POST
+  url: /api/v1/users
+  headers:
+    Content-Type: application/json
+  body:
+    email: "emailInUse@gmail.com"
+    teams:
+      - "Healthcare"
+      - "Finance"
+response:
+  status: 409
+  headers:
+    Content-Type: application/json
+  body:
+    message: "The email emailInUse@gmail.com should be unique"

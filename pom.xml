@@ -43,6 +43,7 @@
 		<mockito-core.version>5.11.0</mockito-core.version>
 		<mockito-junit.version>5.11.0</mockito-junit.version>
 		<rest-assured.version>5.4.0</rest-assured.version>
+		<jackson-datatype.version>2.18.0</jackson-datatype.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -98,6 +99,11 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct-processor</artifactId>
 			<version>${mapstruct-processor.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson-datatype.version}</version>
 		</dependency>
 
 		<dependency>
@@ -201,7 +207,17 @@
 								<useBeanValidation>true</useBeanValidation>
 								<useSpringBoot3>true</useSpringBoot3>
 								<useJakartaEe>true</useJakartaEe>
+								<dateLibrary>custom</dateLibrary>
+								<jsr310>true</jsr310>
 							</configOptions>
+							<typeMappings>
+								<typeMapping>DateTime=Instant</typeMapping>
+								<typeMapping>Date=LocalDate</typeMapping>
+							</typeMappings>
+							<importMappings>
+								<importMapping>Instant=java.time.Instant</importMapping>
+								<importMapping>LocalDate=java.time.LocalDate</importMapping>
+							</importMappings>
 							<globalProperties>
 								<skipFormModel>false</skipFormModel>
 							</globalProperties>

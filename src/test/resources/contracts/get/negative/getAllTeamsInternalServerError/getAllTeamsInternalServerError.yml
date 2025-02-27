@@ -1,4 +1,4 @@
-name: Get all teams
+name: Get all teams Internal Server Error
 request:
   method: GET
   url: /api/v1/teams

@@ -1,40 +1,40 @@
 package com.visiblethread.docanalyzer.contracts;
 
 import com.visiblethread.docanalyzer.controller.ExceptionControllerAdvice;
-import com.visiblethread.docanalyzer.controller.TeamController;
+import com.visiblethread.docanalyzer.controller.UserController;
 import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
-import com.visiblethread.docanalyzer.model.CreateTeamRequest;
-import com.visiblethread.docanalyzer.service.TeamService;
+import com.visiblethread.docanalyzer.model.CreateUserRequest;
+import com.visiblethread.docanalyzer.service.UserService;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class NegativeCreateTeamBase {
+public class NegativeCreateUserBadRequestBase {
 
     @InjectMocks
-    private TeamController teamController;
+    private UserController userController;
 
     @InjectMocks
     private ExceptionControllerAdvice exceptionControllerAdvice;
 
     @Mock
-    private TeamService teamService;
+    private UserService userService;
 
     @BeforeEach
     public void setup() {
-        CreateTeamRequest createTeamRequest = new CreateTeamRequest("");
-        Mockito.when(teamService.createTeam(createTeamRequest)).thenThrow(new DocAnalyzerException(HttpStatus.BAD_REQUEST, "The name cannot be empty or null"));
+        when(userService.createUser(any(CreateUserRequest.class))).thenThrow(new DocAnalyzerException(HttpStatus.BAD_REQUEST, "The email cannot be empty or null"));
         final StandaloneMockMvcBuilder standaloneMockMvcBuilder = MockMvcBuilders
-                .standaloneSetup(teamController).setControllerAdvice(exceptionControllerAdvice);
+                .standaloneSetup(userController).setControllerAdvice(exceptionControllerAdvice);
         RestAssuredMockMvc.standaloneSetup(standaloneMockMvcBuilder);
     }
 }

@@ -19,21 +19,21 @@ public class TeamServiceImpl implements TeamService {
     private TeamRepository teamRepository;
 
     @Autowired
-    private TeamMapper teamMapper;
+    private MapperService mapperService;
 
     @Override
     public List<Team> getAllTeams() {
         return teamRepository.findAll()
                 .stream()
-                .map(teamMapper::toTeam)
+                .map(mapperService::toTeam)
                 .collect(Collectors.toList());
     }
 
     @Override
     public Team createTeam(CreateTeamRequest createTeamRequest) {
         validateTeamName(createTeamRequest.getName());
-        TeamEntity teamEntityCreated = teamRepository.save(teamMapper.toTeamEntity(createTeamRequest));
-        return teamMapper.toTeam(teamEntityCreated);
+        TeamEntity teamEntityCreated = teamRepository.save(mapperService.toTeamEntity(createTeamRequest));
+        return mapperService.toTeam(teamEntityCreated);
     }
 
     private void validateTeamName(String name) {

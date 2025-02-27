@@ -28,7 +28,7 @@ public class TeamServiceTest {
     private TeamRepository teamRepository;
 
     @Mock
-    private TeamMapper teamMapper;
+    private MapperService mapperService;
 
     @InjectMocks
     private TeamServiceImpl teamService;
@@ -39,8 +39,8 @@ public class TeamServiceTest {
         List<TeamEntity> teamEntities = List.of(createTeamEntityWithName(TEAM_1_NAME), createTeamEntityWithName(TEAM_2_NAME));
 
         when(teamRepository.findAll()).thenReturn(teamEntities);
-        when(teamMapper.toTeam(teamEntities.get(0))).thenReturn(createTeamWithName(TEAM_1_NAME));
-        when(teamMapper.toTeam(teamEntities.get(1))).thenReturn(createTeamWithName(TEAM_2_NAME));
+        when(mapperService.toTeam(teamEntities.get(0))).thenReturn(createTeamWithName(TEAM_1_NAME));
+        when(mapperService.toTeam(teamEntities.get(1))).thenReturn(createTeamWithName(TEAM_2_NAME));
 
         List<Team> retrievedTeams = teamService.getAllTeams();
 
@@ -57,9 +57,9 @@ public class TeamServiceTest {
         Team team = createTeamWithIdAndName(TEAM_3_ID, TEAM_3_NAME);
 
         when(teamRepository.existsByName(TEAM_3_NAME)).thenReturn(false);
-        when(teamMapper.toTeamEntity(createTeamRequest)).thenReturn(teamEntity);
+        when(mapperService.toTeamEntity(createTeamRequest)).thenReturn(teamEntity);
         when(teamRepository.save(teamEntity)).thenReturn(teamEntitySaved);
-        when(teamMapper.toTeam(teamEntitySaved)).thenReturn(team);
+        when(mapperService.toTeam(teamEntitySaved)).thenReturn(team);
 
         Team createdTeam = teamService.createTeam(createTeamRequest);
 

@@ -1,4 +1,4 @@
-name: Create team
+name: Create team Bad Request
 request:
   method: POST
   url: /api/v1/teams
