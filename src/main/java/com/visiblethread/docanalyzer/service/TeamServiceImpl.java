@@ -1,12 +1,12 @@
 package com.visiblethread.docanalyzer.service;
 
-import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
+import com.visiblethread.docanalyzer.exception.DuplicateFieldException;
+import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.CreateTeamRequest;
 import com.visiblethread.docanalyzer.model.Team;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,13 +38,13 @@ public class TeamServiceImpl implements TeamService {
 
     private void validateTeamName(String name) {
         if(teamRepository.existsByName(name)){
-            throw new DocAnalyzerException(HttpStatus.CONFLICT, "Team name " + name + " already exists");
+            throw new DuplicateFieldException("team name", name);
         }
         if(name == null || name.trim().isEmpty()) {
-            throw new DocAnalyzerException(HttpStatus.BAD_REQUEST, "Team name cannot be empty or null");
+            throw new ValidationFailureException("Team name cannot be empty or null");
         }
         if (name.length() > 255) {
-            throw new DocAnalyzerException(HttpStatus.BAD_REQUEST, "Team name must not exceed 255 characters");
+            throw new ValidationFailureException("Team name must not exceed 255 characters");
         }
     }
 }

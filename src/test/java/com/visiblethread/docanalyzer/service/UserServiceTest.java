@@ -1,6 +1,8 @@
 package com.visiblethread.docanalyzer.service;
 
 import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
+import com.visiblethread.docanalyzer.exception.DuplicateFieldException;
+import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.CreateUserRequest;
 import com.visiblethread.docanalyzer.model.User;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
@@ -75,7 +76,7 @@ public class UserServiceTest {
         createUserRequest.setEmail(INVALID_EMAIL);
         createUserRequest.setTeams(List.of(TEAM_1_NAME, TEAM_2_NAME));
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("Email: " + createUserRequest.getEmail() + " is not valid, please provide a valid email address",
                 exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
@@ -87,7 +88,7 @@ public class UserServiceTest {
         createUserRequest.setEmail(null);
         createUserRequest.setTeams(List.of(TEAM_1_NAME, TEAM_2_NAME));
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("Email cannot be empty or null", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
@@ -98,7 +99,7 @@ public class UserServiceTest {
         createUserRequest.setEmail(" ");
         createUserRequest.setTeams(List.of(TEAM_1_NAME, TEAM_2_NAME));
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("Email cannot be empty or null", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
@@ -115,11 +116,11 @@ public class UserServiceTest {
 
         when(mapperService.toUserEntity(createUserRequest)).thenReturn(userEntity);
         when(teamRepository.findByNameIn(List.of(TEAM_1_NAME, TEAM_2_NAME))).thenReturn(List.of(team1, team2));
-        when(userRepository.save(userEntity)).thenThrow(new DataIntegrityViolationException("Duplicate email: " + EMAIL_USER_1));
+        when(userRepository.save(userEntity)).thenThrow(new DuplicateFieldException("email", EMAIL_USER_1));
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        DocAnalyzerException exception = assertThrows(DuplicateFieldException.class, () -> userService.createUser(createUserRequest));
         assertEquals(HttpStatus.CONFLICT, exception.getStatus());
-        assertEquals("Email " + EMAIL_USER_1 + " should be unique", exception.getMessage());
+        assertEquals("Field 'email' with value '" + EMAIL_USER_1 + "' is already used", exception.getMessage());
     }
 
     @Test
@@ -128,7 +129,7 @@ public class UserServiceTest {
         createUserRequest.setEmail(EMAIL_USER_1);
         createUserRequest.setTeams(List.of());
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("The user must belong to at least one team", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }
@@ -141,7 +142,7 @@ public class UserServiceTest {
 
         when(teamRepository.findByNameIn(List.of(TEAM_3_NAME))).thenReturn(List.of());
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> userService.createUser(createUserRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("Some teams are duplicated or they do not exist, please create the team(s) first", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
     }

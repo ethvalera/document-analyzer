@@ -1,6 +1,7 @@
 package com.visiblethread.docanalyzer.service;
 
 import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
+import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.CreateTeamRequest;
 import com.visiblethread.docanalyzer.model.Team;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
@@ -73,7 +74,7 @@ public class TeamServiceTest {
 
         DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> teamService.createTeam(createTeamRequest));
         assertEquals(HttpStatus.CONFLICT, exception.getStatus());
-        assertEquals("Team name " + TEAM_3_NAME + " already exists", exception.getMessage());
+        assertEquals("Field 'team name' with value '" + TEAM_3_NAME + "' is already used", exception.getMessage());
     }
 
     @Test
@@ -81,7 +82,7 @@ public class TeamServiceTest {
         CreateTeamRequest createTeamRequest = new CreateTeamRequest(" ");
         when(teamRepository.existsByName(" ")).thenReturn(false);
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> teamService.createTeam(createTeamRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> teamService.createTeam(createTeamRequest));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
         assertEquals("Team name cannot be empty or null", exception.getMessage());
     }
@@ -91,7 +92,7 @@ public class TeamServiceTest {
         CreateTeamRequest createTeamRequest = new CreateTeamRequest(null);
         when(teamRepository.existsByName(null)).thenReturn(false);
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> teamService.createTeam(createTeamRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> teamService.createTeam(createTeamRequest));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
         assertEquals("Team name cannot be empty or null", exception.getMessage());
     }
@@ -101,7 +102,7 @@ public class TeamServiceTest {
         CreateTeamRequest createTeamRequest = new CreateTeamRequest(LONG_TEAM_NAME);
         when(teamRepository.existsByName(LONG_TEAM_NAME)).thenReturn(false);
 
-        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class, () -> teamService.createTeam(createTeamRequest));
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> teamService.createTeam(createTeamRequest));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
         assertEquals("Team name must not exceed 255 characters", exception.getMessage());
     }

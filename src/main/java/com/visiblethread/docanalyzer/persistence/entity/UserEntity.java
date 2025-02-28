@@ -1,6 +1,7 @@
 package com.visiblethread.docanalyzer.persistence.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -17,7 +18,8 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Email
+    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(name = "created_at")

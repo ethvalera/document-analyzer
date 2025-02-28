@@ -11,4 +11,4 @@ response:
   headers:
     Content-Type: application/json
   body:
-    message: "Team name RepeatedTeam already exists"
+    message: "Field 'team name' with value 'RepeatedTeam' is already used"

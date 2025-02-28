@@ -32,7 +32,7 @@ public class NegativeCreateUserConflictBase {
 
     @BeforeEach
     public void setup() {
-        when(userService.createUser(any(CreateUserRequest.class))).thenThrow(new DocAnalyzerException(HttpStatus.CONFLICT, "The email emailInUse@gmail.com should be unique"));
+        when(userService.createUser(any(CreateUserRequest.class))).thenThrow(new DocAnalyzerException(HttpStatus.CONFLICT, "Field 'email' with value 'emailInUse@gmail.com' is already used"));
         final StandaloneMockMvcBuilder standaloneMockMvcBuilder = MockMvcBuilders
                 .standaloneSetup(userController).setControllerAdvice(exceptionControllerAdvice);
         RestAssuredMockMvc.standaloneSetup(standaloneMockMvcBuilder);

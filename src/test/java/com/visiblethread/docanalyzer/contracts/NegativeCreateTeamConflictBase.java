@@ -33,7 +33,7 @@ public class NegativeCreateTeamConflictBase {
     @BeforeEach
     public void setup() {
         CreateTeamRequest createTeamRequest = new CreateTeamRequest("RepeatedTeam");
-        when(teamService.createTeam(createTeamRequest)).thenThrow(new DocAnalyzerException(HttpStatus.CONFLICT, "Team name RepeatedTeam already exists"));
+        when(teamService.createTeam(createTeamRequest)).thenThrow(new DocAnalyzerException(HttpStatus.CONFLICT, "Field 'team name' with value 'RepeatedTeam' is already used"));
         final StandaloneMockMvcBuilder standaloneMockMvcBuilder = MockMvcBuilders
                 .standaloneSetup(teamController).setControllerAdvice(exceptionControllerAdvice);
         RestAssuredMockMvc.standaloneSetup(standaloneMockMvcBuilder);

@@ -14,4 +14,4 @@ response:
   headers:
     Content-Type: application/json
   body:
-    message: "The email emailInUse@gmail.com should be unique"
+    message: "Field 'email' with value 'emailInUse@gmail.com' is already used"
