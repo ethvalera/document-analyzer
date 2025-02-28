@@ -8,12 +8,16 @@ import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
 import com.visiblethread.docanalyzer.persistence.repository.TeamRepository;
 import com.visiblethread.docanalyzer.persistence.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,17 +30,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MapperService mapperService;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     @Override
     public User createUser(CreateUserRequest createUserRequest) {
-        validateEmail(createUserRequest.getEmail());
+        final String email = createUserRequest.getEmail();
+        logger.debug("Creating user with email: {}", email);
+        validateEmail(email);
         List<TeamEntity> teamEntities = validateTeams(createUserRequest.getTeams());
         UserEntity userEntity = mapperService.toUserEntity(createUserRequest);
         userEntity.getTeams().addAll(teamEntities);
+        logger.debug("Saving user entity with email: {}", email);
         UserEntity userCreated = userRepository.save(userEntity);
+
+        logger.info("User created successfully with email: {}", email);
         return mapperService.toUser(userCreated);
     }
 
     private void validateEmail(String email) {
+        logger.debug("Validating email: {}", email);
         if (email == null || email.trim().isEmpty()) {
             throw new ValidationFailureException("Email cannot be empty or null");
         }
@@ -57,6 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<TeamEntity> validateTeams(List<String> teams) {
+        logger.debug("Validating teams for user creation");
         if(teams == null || teams.isEmpty()) {
             throw new ValidationFailureException("The user must belong to at least one team");
         }
