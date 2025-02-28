@@ -1,9 +1,7 @@
 package com.visiblethread.docanalyzer.service;
 
-import com.visiblethread.docanalyzer.model.CreateTeamRequest;
-import com.visiblethread.docanalyzer.model.CreateUserRequest;
-import com.visiblethread.docanalyzer.model.Team;
-import com.visiblethread.docanalyzer.model.User;
+import com.visiblethread.docanalyzer.model.*;
+import com.visiblethread.docanalyzer.persistence.entity.DocumentEntity;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,6 +69,21 @@ public class MapperServiceTest {
         assertEquals(userEntity.getEmail(), user.getEmail());
         assertEquals(userEntity.getCreatedAt(), user.getCreatedAt());
         assertEquals(2, user.getTeams().size());
+    }
+
+    @Test
+    public void testDocumentEntityToDocument() {
+        UserEntity userEntity = createUserEntityWithEmailAndTeams(EMAIL_USER_1, new HashSet<>());
+        userEntity.setId(1L);
+        userEntity.setCreatedAt(Instant.parse(CREATED_AT));
+        DocumentEntity documentEntity = createDocumentEntityWithAllParams(DOC_1_NAME, DOC_1_COUNT, userEntity);
+        Document document = mapperService.toDocument(documentEntity);
+
+        assertEquals(documentEntity.getName(), document.getName());
+        assertEquals(documentEntity.getWordCount(), document.getWordCount());
+        assertEquals(documentEntity.getId(), document.getId());
+        assertEquals(documentEntity.getUploadedAt(), document.getUploadedAt());
+        assertEquals(documentEntity.getUserEntity().getId(), document.getUserId());
     }
 
 }

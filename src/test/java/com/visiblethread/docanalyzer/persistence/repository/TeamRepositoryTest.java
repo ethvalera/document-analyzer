@@ -1,13 +1,11 @@
 package com.visiblethread.docanalyzer.persistence.repository;
 
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,8 +15,7 @@ import static com.visiblethread.docanalyzer.utils.TestDataUtils.createTeamEntity
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@DataJpaTest
 public class TeamRepositoryTest {
 
     @Autowired
@@ -26,13 +23,7 @@ public class TeamRepositoryTest {
 
     @BeforeEach
     public void setup() {
-        teamRepository.deleteAllInBatch();
         teamRepository.saveAll(List.of(createTeamEntityWithName(TEAM_1_NAME), createTeamEntityWithName(TEAM_2_NAME)));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        teamRepository.deleteAll();
     }
 
     @Test

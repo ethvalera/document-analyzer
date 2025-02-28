@@ -7,8 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,8 +19,7 @@ import static com.visiblethread.docanalyzer.utils.TestDataUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@DataJpaTest
 public class UserRepositoryTest {
 
     @Autowired
@@ -32,15 +30,7 @@ public class UserRepositoryTest {
 
     @BeforeEach
     public void setup() {
-        userRepository.deleteAllInBatch();
-        teamRepository.deleteAllInBatch();
         teamRepository.saveAll(List.of(createTeamEntityWithName(TEAM_1_NAME), createTeamEntityWithName(TEAM_2_NAME)));
-    }
-
-    @AfterEach
-    public void tearDown() {
-        userRepository.deleteAll();
-        teamRepository.deleteAll();
     }
 
     @Test

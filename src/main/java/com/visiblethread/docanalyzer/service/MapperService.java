@@ -1,9 +1,7 @@
 package com.visiblethread.docanalyzer.service;
 
-import com.visiblethread.docanalyzer.model.CreateTeamRequest;
-import com.visiblethread.docanalyzer.model.CreateUserRequest;
-import com.visiblethread.docanalyzer.model.Team;
-import com.visiblethread.docanalyzer.model.User;
+import com.visiblethread.docanalyzer.model.*;
+import com.visiblethread.docanalyzer.persistence.entity.DocumentEntity;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
 import org.mapstruct.Mapper;
@@ -25,5 +23,8 @@ public interface MapperService {
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "teams", source = "teams")
     User toUser(UserEntity userEntity);
+
+    @Mapping(target = "userId", source = "userEntity.id")
+    Document toDocument(DocumentEntity documentEntity);
 
 }

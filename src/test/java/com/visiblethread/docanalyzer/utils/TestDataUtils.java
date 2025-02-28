@@ -1,12 +1,13 @@
 package com.visiblethread.docanalyzer.utils;
 
+import com.visiblethread.docanalyzer.model.Document;
 import com.visiblethread.docanalyzer.model.Team;
 import com.visiblethread.docanalyzer.model.User;
+import com.visiblethread.docanalyzer.persistence.entity.DocumentEntity;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -55,5 +56,23 @@ public final class TestDataUtils {
         user.setCreatedAt(Instant.parse(CREATED_AT));
         user.setTeams(teams);
         return user;
+    }
+
+    public static DocumentEntity createDocumentEntityWithAllParams(String name, Integer count, UserEntity userEntity) {
+        DocumentEntity documentEntity = new DocumentEntity();
+        documentEntity.setName(name);
+        documentEntity.setWordCount(count);
+        documentEntity.setUploadedAt(Instant.parse(CREATED_AT));
+        documentEntity.setUserEntity(userEntity);
+        return documentEntity;
+    }
+
+    public static Document createDocument(String name, Integer count, Long userId) {
+        Document document = new Document();
+        document.setName(name);
+        document.setWordCount(count);
+        document.setUploadedAt(Instant.parse(CREATED_AT));
+        document.setUserId(userId);
+        return document;
     }
 }

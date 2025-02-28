@@ -24,7 +24,7 @@ CREATE TABLE document (
     name VARCHAR(255) UNIQUE NOT NULL,
     word_count INTEGER NOT NULL,
     uploaded_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-    user_id INTEGER NOT NULL,
+    user_id BIGINT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES user_account(id) ON DELETE CASCADE
 );
 

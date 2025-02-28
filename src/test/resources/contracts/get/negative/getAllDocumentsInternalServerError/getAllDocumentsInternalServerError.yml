@@ -1,0 +1,11 @@
+name: Get all documents Internal Server Error
+request:
+  method: GET
+  url: /api/v1/documents
+response:
+  status: 500
+  headers:
+    Content-Type: application/json
+  body:
+    status: 500
+    message: "An unexpected error occurred"

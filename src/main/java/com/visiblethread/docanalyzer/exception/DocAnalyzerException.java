@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 public class DocAnalyzerException extends RuntimeException {
     private final HttpStatus status;
 
-    public DocAnalyzerException(HttpStatus status, String message) {
+    public DocAnalyzerException(final HttpStatus status, final String message) {
         super(message);
         this.status = status;
     }

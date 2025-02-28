@@ -1,0 +1,19 @@
+name: Get all documents
+request:
+  method: GET
+  url: /api/v1/documents
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    - id: 1
+      name: "report.txt"
+      wordCount: 1500
+      uploadedAt: "2025-02-24T12:00:00Z"
+      userId: 1
+    - id: 2
+      name: "spec.txt"
+      wordCount: 800
+      uploadedAt: "2025-02-24T12:00:00Z"
+      userId: 1
