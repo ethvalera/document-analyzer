@@ -1,2 +1,1 @@
-CREATE INDEX idx_user_account_email ON user_account(email);
-CREATE INDEX idx_document_uploaded_at ON document(uploaded_at);
+CREATE INDEX idx_document_user_upload_date ON document(user_id, uploaded_at);

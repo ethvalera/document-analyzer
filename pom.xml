@@ -209,6 +209,7 @@
 								<useJakartaEe>true</useJakartaEe>
 								<dateLibrary>custom</dateLibrary>
 								<jsr310>true</jsr310>
+								<dateLibrary>java8-localdate</dateLibrary>
 							</configOptions>
 							<typeMappings>
 								<typeMapping>DateTime=Instant</typeMapping>

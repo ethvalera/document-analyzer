@@ -3,6 +3,7 @@ package com.visiblethread.docanalyzer.service;
 import com.visiblethread.docanalyzer.exception.DuplicateFieldException;
 import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.CreateUserRequest;
+import com.visiblethread.docanalyzer.model.InactiveUsersResponse;
 import com.visiblethread.docanalyzer.model.User;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
@@ -14,6 +15,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -45,6 +50,15 @@ public class UserServiceImpl implements UserService {
 
         logger.info("User created successfully with email: {}", email);
         return mapperService.toUser(userCreated);
+    }
+
+    @Override
+    public InactiveUsersResponse getInactiveUsersWithinPeriod(LocalDate startDate, LocalDate endDate) {
+        validatePeriodOfTime(startDate, endDate);
+        Instant startDateInstant = startDate.atStartOfDay().atOffset(ZoneOffset.UTC).toInstant();
+        Instant endDateInstant = endDate.atTime(LocalTime.MAX).atOffset(ZoneOffset.UTC).toInstant();
+        Integer count = userRepository.countInactiveUsers(startDateInstant, endDateInstant);
+        return new InactiveUsersResponse(count);
     }
 
     private void validateEmail(String email) {
@@ -80,5 +94,12 @@ public class UserServiceImpl implements UserService {
         }
 
         return teamEntities;
+    }
+
+    private void validatePeriodOfTime(LocalDate startDate, LocalDate endDate) {
+        logger.debug("Validating that start date is before end date");
+        if(startDate.isAfter(endDate)) {
+            throw new ValidationFailureException("Start date must be before end date");
+        }
     }
 }

@@ -59,7 +59,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: "#/components/schemas/team"
+                $ref: "#/components/schemas/team"
         400:
           description: Invalid request - invalid data or missing mandatory parameters
           content:
@@ -112,6 +112,52 @@ paths:
               schema:
                 $ref: "#/components/schemas/internalServerError"
 
+  /users/inactive:
+    get:
+      summary: Get number of users who registered before a date and did not upload documents within a time period
+      description: Returns the number of users who were registered before the specified date and have not uploaded any documents between the start and end dates.
+      operationId: getInactiveUsers
+      tags:
+        - Users
+      parameters:
+        - name: startDate
+          in: query
+          description: The start date of the period to check for document uploads (ISO 8601 format).
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-02-26"
+        - name: endDate
+          in: query
+          description: The end date of the period to check for document uploads (ISO 8601 format).
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2025-02-26"
+      responses:
+        '200':
+          description: Count of inactive users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inactiveUsersResponse'
+              example:
+                inactiveUserCount: 42
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequestError'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalServerError"
+
   /documents:
     get:
       summary: List all documents
@@ -133,8 +179,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/internalServerError"
-
-
 
 components:
   schemas:
@@ -224,6 +268,15 @@ components:
             type: string
           example: [ "Healthcare", "Finance" ]
 
+    inactiveUsersResponse:
+      type: object
+      properties:
+        inactiveUserCount:
+          type: integer
+          description: The number of users who registered before 'registeredBefore' and did not upload a document between 'startDate' and 'endDate'.
+      required:
+        - inactiveUserCount
+
     internalServerError:
       type: object
       properties:
@@ -277,4 +330,3 @@ components:
       example:
         status: 409
         message: "Parameter already exists"
-
