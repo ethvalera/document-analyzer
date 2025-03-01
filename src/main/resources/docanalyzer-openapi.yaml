@@ -180,6 +180,50 @@ paths:
               schema:
                 $ref: "#/components/schemas/internalServerError"
 
+  /documents/{documentId}/word-frequencies:
+    get:
+      summary: Get word frequencies of a document
+      description: Returns the top 10 words by frequency in the given document, excluding ("The, Me, You, I, Of, And, A, We").
+      operationId: getWordFrequencies
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          description: The ID of the document to analyze.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        200:
+          description: A list of top 10 words and their frequencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/wordFrequency'
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequestError'
+        404:
+          description: Document ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notFoundError'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalServerError"
+
 components:
   schemas:
     team:
@@ -251,6 +295,23 @@ components:
       example:
         id: 1
         name: Healthcare
+
+    wordFrequency:
+      type: object
+      properties:
+        word:
+          type: string
+          example: "contract"
+        count:
+          type: integer
+          format: int64
+          example: 45
+      required:
+        - word
+        - count
+      example:
+        word: "contract"
+        count: 45
 
     createUserRequest:
       type: object
@@ -330,3 +391,21 @@ components:
       example:
         status: 409
         message: "Parameter already exists"
+
+    notFoundError:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 404
+          description: The HTTP status code
+        message:
+          type: string
+          example: "ID not found"
+          description: An error message
+      required:
+        - status
+        - message
+      example:
+        status: 404
+        message: "ID not found"
