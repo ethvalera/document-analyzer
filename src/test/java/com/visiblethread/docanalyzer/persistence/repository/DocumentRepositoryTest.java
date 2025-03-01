@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.visiblethread.docanalyzer.utils.Constants.*;
-import static com.visiblethread.docanalyzer.utils.Constants.EMAIL_USER_1;
+import static com.visiblethread.docanalyzer.utils.TestConstants.*;
+import static com.visiblethread.docanalyzer.utils.TestConstants.EMAIL_USER_1;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

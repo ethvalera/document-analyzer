@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static com.visiblethread.docanalyzer.utils.Constants.*;
+import static com.visiblethread.docanalyzer.utils.TestConstants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.*;
 import static org.mockito.Mockito.when;
 

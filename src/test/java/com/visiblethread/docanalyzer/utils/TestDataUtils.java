@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
-import static com.visiblethread.docanalyzer.utils.Constants.CREATED_AT;
+import static com.visiblethread.docanalyzer.utils.TestConstants.CREATED_AT;
 
 public final class TestDataUtils {
 

@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.visiblethread.docanalyzer.utils.Constants.*;
+import static com.visiblethread.docanalyzer.utils.TestConstants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.createTeamWithIdAndName;
 import static org.mockito.Mockito.when;
 

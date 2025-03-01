@@ -1,0 +1,11 @@
+name: Get word frequencies document ID not found
+request:
+  method: GET
+  url: /api/v1/documents/5300/word-frequencies
+response:
+  status: 404
+  headers:
+    Content-Type: application/json
+  body:
+    status: 404
+    message: "Field 'Document ID' with value '5300' not found"

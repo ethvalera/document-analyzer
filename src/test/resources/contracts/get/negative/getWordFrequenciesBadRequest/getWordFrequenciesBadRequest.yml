@@ -1,0 +1,11 @@
+name: Get word frequencies document ID Bad Request
+request:
+  method: GET
+  url: /api/v1/documents/6000/word-frequencies
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+    status: 400
+    message: "Document content cannot be empty"

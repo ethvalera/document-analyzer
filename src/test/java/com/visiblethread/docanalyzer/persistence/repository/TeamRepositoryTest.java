@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
-import static com.visiblethread.docanalyzer.utils.Constants.*;
+import static com.visiblethread.docanalyzer.utils.TestConstants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.createTeamEntityWithName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

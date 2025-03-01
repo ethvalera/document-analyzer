@@ -15,7 +15,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-import static com.visiblethread.docanalyzer.utils.Constants.*;
+import static com.visiblethread.docanalyzer.utils.TestConstants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

@@ -1,6 +1,6 @@
 package com.visiblethread.docanalyzer.utils;
 
-public final class Constants {
+public final class TestConstants {
 
     // Team data
     public static final Long TEAM_1_ID = 1L;
