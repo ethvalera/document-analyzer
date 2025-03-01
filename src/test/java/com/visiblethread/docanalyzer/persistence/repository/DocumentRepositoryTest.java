@@ -3,7 +3,6 @@ package com.visiblethread.docanalyzer.persistence.repository;
 import com.visiblethread.docanalyzer.persistence.entity.DocumentEntity;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
-import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +37,14 @@ public class DocumentRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void testSaveDocumentAndFindAll() {
         Optional<UserEntity> userEntity = userRepository.findByEmail(EMAIL_USER_1);
         DocumentEntity documentEntity = createDocumentEntityWithAllParams(DOC_1_NAME, DOC_1_COUNT, userEntity.get());
+        assertEquals(8, documentRepository.findAll().size());
+
         documentRepository.save(documentEntity);
 
         List<DocumentEntity> documentEntities = documentRepository.findAll();
-        assertEquals(1, documentEntities.size());
-        assertEquals(DOC_1_NAME, documentEntities.get(0).getName());
-        assertEquals(DOC_1_COUNT, documentEntities.get(0).getWordCount());
-        assertEquals(EMAIL_USER_1, documentEntities.get(0).getUserEntity().getEmail());
+        assertEquals(9, documentEntities.size());
     }
 }

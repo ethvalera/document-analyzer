@@ -98,6 +98,9 @@ public class UserServiceImpl implements UserService {
 
     private void validatePeriodOfTime(LocalDate startDate, LocalDate endDate) {
         logger.debug("Validating that start date is before end date");
+        if(startDate == null || endDate == null) {
+            throw new ValidationFailureException("Start date and end date must not be null");
+        }
         if(startDate.isAfter(endDate)) {
             throw new ValidationFailureException("Start date must be before end date");
         }

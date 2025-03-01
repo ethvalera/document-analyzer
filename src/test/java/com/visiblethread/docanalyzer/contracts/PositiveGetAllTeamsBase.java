@@ -8,13 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static com.visiblethread.docanalyzer.utils.Constants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.createTeamWithIdAndName;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class PositiveGetAllTeamsBase {
@@ -29,7 +29,7 @@ public class PositiveGetAllTeamsBase {
     public void setup() {
         Team team1 = createTeamWithIdAndName(TEAM_1_ID, TEAM_1_NAME);
         Team team2 = createTeamWithIdAndName(TEAM_2_ID, TEAM_2_NAME);
-        Mockito.when(teamService.getAllTeams()).thenReturn(List.of(team1, team2));
+        when(teamService.getAllTeams()).thenReturn(List.of(team1, team2));
         RestAssuredMockMvc.standaloneSetup(teamController);
     }
 }

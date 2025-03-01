@@ -35,7 +35,7 @@
 		<swagger-annotations.version>2.2.28</swagger-annotations.version>
 		<swagger-core-jakarta.version>2.2.28</swagger-core-jakarta.version>
 		<jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-		<mapstruct-version>1.6.3</mapstruct-version>
+		<mapstruct.version>1.6.3</mapstruct.version>
 		<mapstruct-processor.version>1.6.3</mapstruct-processor.version>
 		<spring-cloud-starter-contract.version>4.1.4</spring-cloud-starter-contract.version>
 		<spring-cloud-starter-contract-stub-runner.version>4.1.4</spring-cloud-starter-contract-stub-runner.version>
@@ -93,7 +93,7 @@
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
-			<version>${mapstruct-version}</version>
+			<version>${mapstruct.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>

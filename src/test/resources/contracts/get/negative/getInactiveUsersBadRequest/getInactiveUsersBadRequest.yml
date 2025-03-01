@@ -1,0 +1,11 @@
+name: Get inactive users within period Bad Request
+request:
+  method: GET
+  url: /api/v1/users/inactive?startDate=2025-04-04&endDate=2024-04-04
+response:
+  status: 400
+  headers:
+    Content-Type: application/json
+  body:
+    status: 400
+    message: "Start date must be before end date"

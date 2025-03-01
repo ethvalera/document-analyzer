@@ -4,6 +4,7 @@ import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
 import com.visiblethread.docanalyzer.exception.DuplicateFieldException;
 import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.CreateUserRequest;
+import com.visiblethread.docanalyzer.model.InactiveUsersResponse;
 import com.visiblethread.docanalyzer.model.User;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
 import com.visiblethread.docanalyzer.persistence.entity.UserEntity;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import static com.visiblethread.docanalyzer.utils.Constants.*;
 import static com.visiblethread.docanalyzer.utils.TestDataUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 
@@ -145,6 +148,51 @@ public class UserServiceTest {
         ValidationFailureException exception = assertThrows(ValidationFailureException.class, () -> userService.createUser(createUserRequest));
         assertEquals("Some teams are duplicated or they do not exist, please create the team(s) first", exception.getMessage());
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+    }
+
+    @Test
+    public void testGetInactiveUsers_success() {
+        LocalDate startDate = LocalDate.parse("2024-04-01");
+        LocalDate endDate = LocalDate.parse("2024-05-02");
+
+        when(userRepository.countInactiveUsers(any(Instant.class), any(Instant.class))).thenReturn(3);
+
+        InactiveUsersResponse response = userService.getInactiveUsersWithinPeriod(startDate, endDate);
+        assertEquals(3, response.getInactiveUserCount());
+    }
+
+    @Test
+    public void testGetInactiveUsers_startDateAfterEndDate_badRequest() {
+        LocalDate startDate = LocalDate.parse("2025-04-01");
+        LocalDate endDate = LocalDate.parse("2024-05-02");
+
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class,
+                () -> userService.getInactiveUsersWithinPeriod(startDate, endDate));
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+        assertEquals("Start date must be before end date", exception.getMessage());
+    }
+
+    @Test
+    public void testGetInactiveUsers_nullStartDate_badRequest() {
+        LocalDate endDate = LocalDate.parse("2024-05-02");
+
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class,
+                () -> userService.getInactiveUsersWithinPeriod(null, endDate));
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+        assertEquals("Start date and end date must not be null", exception.getMessage());
+    }
+
+    @Test
+    public void testGetInactiveUsers_nullEndDate_badRequest() {
+        LocalDate startDate = LocalDate.parse("2024-04-01");
+
+        ValidationFailureException exception = assertThrows(ValidationFailureException.class,
+                () -> userService.getInactiveUsersWithinPeriod(startDate, null));
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
+        assertEquals("Start date and end date must not be null", exception.getMessage());
     }
 
 }

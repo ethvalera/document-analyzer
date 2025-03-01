@@ -9,11 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.StandaloneMockMvcBuilder;
+
+import static org.mockito.Mockito.when;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +31,7 @@ public class NegativeGetAllTeamsInternalServerErrorBase {
 
     @BeforeEach
     public void setup() {
-        Mockito.when(teamService.getAllTeams()).thenThrow(new DocAnalyzerException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
+        when(teamService.getAllTeams()).thenThrow(new DocAnalyzerException(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred"));
         final StandaloneMockMvcBuilder standaloneMockMvcBuilder = MockMvcBuilders
                 .standaloneSetup(teamController).setControllerAdvice(exceptionControllerAdvice);
         RestAssuredMockMvc.standaloneSetup(standaloneMockMvcBuilder);
