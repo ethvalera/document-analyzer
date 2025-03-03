@@ -54,4 +54,21 @@ public class DocumentControllerIntegrationTest {
                 .andExpect(jsonPath("$[0].word").value("contract"))
                 .andExpect(jsonPath("$[0].count").value("2"));
     }
+
+    @Test
+    public void testGetLongestWordSynonyms_success() throws Exception {
+        mockMvc.perform(get("/api/v1/documents/100/longest-word-synonyms"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.longestWord").exists())
+                .andExpect(jsonPath("$.synonyms").isArray());
+    }
+
+    @Test
+    public void testGetLongestWordSynonyms_invalidDocumentId_notFoundError() throws Exception {
+        mockMvc.perform(get("/api/v1/documents/5500/longest-word-synonyms"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+    }
 }

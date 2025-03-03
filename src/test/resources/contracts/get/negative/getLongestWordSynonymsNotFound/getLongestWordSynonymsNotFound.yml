@@ -1,0 +1,11 @@
+name: Get longest word synonyms document ID not found
+request:
+  method: GET
+  url: /api/v1/documents/5300/longest-word-synonyms
+response:
+  status: 404
+  headers:
+    Content-Type: application/json
+  body:
+    status: 404
+    message: "Field 'Document ID' with value '5300' not found"

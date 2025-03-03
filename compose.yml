@@ -23,13 +23,16 @@ services:
     depends_on:
       - db
     environment:
-      DB_PASSWORD_FILE: /run/secrets/db_password
+      - DB_PASSWORD_FILE=/run/secrets/db_password
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/credentials.json
     secrets:
       - db_password
     ports:
       - "8080:8080"
     networks:
       - app-pg-network
+    volumes:
+      - /Users/elisabeth/.config/gcloud/application_default_credentials.json:/app/credentials.json
 
 secrets:
   db_password:

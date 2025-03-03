@@ -2,6 +2,7 @@ package com.visiblethread.docanalyzer.controller;
 
 import com.visiblethread.docanalyzer.api.DocumentsApi;
 import com.visiblethread.docanalyzer.model.Document;
+import com.visiblethread.docanalyzer.model.LongestWordSynonyms;
 import com.visiblethread.docanalyzer.model.WordFrequency;
 import com.visiblethread.docanalyzer.service.DocumentService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,11 @@ public class DocumentController implements DocumentsApi {
     public ResponseEntity<List<Document>> getAllDocuments() {
         logger.debug("Received request to get all documents");
         return new ResponseEntity<>(documentService.getAllDocuments(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<LongestWordSynonyms> getLongestWordSynonyms(Long documentId) {
+        return new ResponseEntity<>(documentService.getLongestWordSynonyms(documentId), HttpStatus.OK);
     }
 
     @Override

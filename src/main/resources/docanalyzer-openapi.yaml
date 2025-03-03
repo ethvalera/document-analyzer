@@ -224,6 +224,48 @@ paths:
               schema:
                 $ref: "#/components/schemas/internalServerError"
 
+  /documents/{documentId}/longest-word-synonyms:
+    get:
+      summary: Get synonyms for the longest word in a given document
+      description: Returns the longest word in the given document and synonyms - excludes ("The, Me, You, I, Of, And, A, We").
+      operationId: getLongestWordSynonyms
+      tags:
+        - Documents
+      parameters:
+        - name: documentId
+          in: path
+          description: The ID of the document to analyze.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        200:
+          description: The longest word and its synonyms
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/longestWordSynonyms'
+        400:
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/badRequestError'
+        404:
+          description: Document ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notFoundError'
+        500:
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalServerError"
+
 components:
   schemas:
     team:
@@ -312,6 +354,23 @@ components:
       example:
         word: "contract"
         count: 45
+
+    longestWordSynonyms:
+      type: object
+      properties:
+        longestWord:
+          type: string
+          description: The longest word
+          example: "administration"
+        synonyms:
+          type: array
+          description: List of synonyms for the longest word
+          items:
+            type: string
+          example: [ "management", "government", "governance", "organization", "leadership" ]
+      required:
+        - longestWord
+        - synonyms
 
     createUserRequest:
       type: object

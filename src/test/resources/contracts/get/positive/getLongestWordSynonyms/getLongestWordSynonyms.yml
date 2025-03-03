@@ -1,0 +1,16 @@
+name: Get longest word and synonyms - Success
+request:
+  method: GET
+  url: /api/v1/documents/100/longest-word-synonyms
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    longestWord: "conditions"
+    synonyms:
+      - "terms"
+      - "stipulations"
+      - "requirements"
+      - "provisions"
+      - "circumstances"

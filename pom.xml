@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -44,6 +44,7 @@
 		<mockito-junit.version>5.11.0</mockito-junit.version>
 		<rest-assured.version>5.4.0</rest-assured.version>
 		<jackson-datatype.version>2.18.0</jackson-datatype.version>
+		<spring-ai.version>1.0.0-M6</spring-ai.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -53,6 +54,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-vertex-ai-gemini-spring-boot-starter</artifactId>
 		</dependency>
 
 		<dependency>
@@ -142,6 +147,18 @@
 		</dependency>
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.ai</groupId>
+				<artifactId>spring-ai-bom</artifactId>
+				<version>${spring-ai.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -184,7 +201,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir/src/main/resources/docanalyzer-openapi.yaml}</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/docanalyzer-openapi.yaml</inputSpec>
 							<generatorName>html</generatorName>
 							<output>${project.build.directory}/generated-docs</output>
 						</configuration>
@@ -195,7 +212,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${project.basedir/src/main/resources/docanalyzer-openapi.yaml}</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/docanalyzer-openapi.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<configOptions>
 								<generateSupportingFiles>false</generateSupportingFiles>

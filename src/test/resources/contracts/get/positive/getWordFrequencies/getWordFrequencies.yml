@@ -1,0 +1,29 @@
+name: Get word frequencies
+request:
+  method: GET
+  url: /api/v1/documents/100/word-frequencies
+response:
+  status: 200
+  headers:
+    Content-Type: application/json
+  body:
+    - word: "contract"
+      count: 2
+    - word: "and"
+      count: 2
+    - word: "the"
+      count: 2
+    - word: "terms"
+      count: 1
+    - word: "conditions"
+      count: 1
+    - word: "signed"
+      count: 1
+    - word: "with"
+      count: 1
+    - word: "pen"
+      count: 1
+    - word: "sent"
+      count: 1
+    - word: "letter"
+      count: 1

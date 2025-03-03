@@ -1,8 +1,10 @@
 package com.visiblethread.docanalyzer.service;
 
+import com.visiblethread.docanalyzer.exception.DocAnalyzerException;
 import com.visiblethread.docanalyzer.exception.EntityNotFoundException;
 import com.visiblethread.docanalyzer.exception.ValidationFailureException;
 import com.visiblethread.docanalyzer.model.Document;
+import com.visiblethread.docanalyzer.model.LongestWordSynonyms;
 import com.visiblethread.docanalyzer.model.WordFrequency;
 import com.visiblethread.docanalyzer.persistence.entity.DocumentEntity;
 import com.visiblethread.docanalyzer.persistence.entity.TeamEntity;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -38,6 +41,9 @@ public class DocumentServiceTest {
 
     @Mock
     private DocumentRepository documentRepository;
+
+    @Mock
+    private GeminiAIServiceImpl geminiAIService;
 
     @InjectMocks
     private DocumentServiceImpl documentService;
@@ -117,6 +123,65 @@ public class DocumentServiceTest {
         assertEquals(10, wordFrequencies.size());
         assertEquals("contract", wordFrequencies.get(0).getWord());
         assertEquals(2L, wordFrequencies.get(0).getCount());
+    }
+
+    @Test
+    void testGetLongestWordSynonyms_documentIdDoesNotExist_EntityNotFoundException() {
+        Long documentId = 1L;
+        when(documentRepository.findById(documentId)).thenReturn(Optional.empty());
+
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> documentService.getLongestWordSynonyms(documentId));
+
+        assertEquals("Field 'Document ID' with value '1' not found", exception.getMessage());
+        verify(documentRepository).findById(documentId);
+    }
+
+    @Test
+    void testGetLongestWordSynonyms_geminiServiceReturnsNull_throwsDocAnalyzerException() {
+        ReflectionTestUtils.setField(documentService, "documentText", "This document contains conditions");
+        Long documentId = 1L;
+        when(documentRepository.findById(documentId)).thenReturn(Optional.of(new DocumentEntity()));
+        when(geminiAIService.generateTextResponse(anyString())).thenReturn(null);
+
+        DocAnalyzerException exception = assertThrows(DocAnalyzerException.class,
+                () -> documentService.getLongestWordSynonyms(documentId));
+
+        assertEquals("Error getting Gemini response", exception.getMessage());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatus());
+        verify(documentRepository).findById(documentId);
+    }
+
+    @Test
+    void testGetLongestWordSynonyms_multipleWordsWithSameLength_returnsFirstLongestWord() {
+        ReflectionTestUtils.setField(documentService, "documentText", "Document with multiple longest words like beautiful wonderful");
+        Long documentId = 1L;
+
+        when(documentRepository.findById(documentId)).thenReturn(Optional.of(new DocumentEntity()));
+        when(geminiAIService.generateTextResponse(anyString())).thenReturn("gorgeous, attractive, pretty, lovely, stunning");
+
+        LongestWordSynonyms result = documentService.getLongestWordSynonyms(documentId);
+
+        assertEquals("beautiful", result.getLongestWord());
+        verify(documentRepository).findById(documentId);
+        verify(geminiAIService).generateTextResponse(contains("beautiful"));
+    }
+
+    @Test
+    void testGetLongestWordSynonyms_success() {
+        ReflectionTestUtils.setField(documentService, "documentText", "This document contains conditions");
+        Long documentId = 1L;
+
+        when(documentRepository.findById(documentId)).thenReturn(Optional.of(new DocumentEntity()));
+        String expectedSynonyms = "terms, stipulations, requirements, provisions, circumstances";
+        when(geminiAIService.generateTextResponse(anyString())).thenReturn(expectedSynonyms);
+
+        LongestWordSynonyms result = documentService.getLongestWordSynonyms(documentId);
+
+        assertEquals("conditions", result.getLongestWord());
+        assertEquals(5, result.getSynonyms().size());
+        assertEquals(List.of("terms", "stipulations", "requirements", "provisions", "circumstances"), result.getSynonyms());
+        verify(documentRepository).findById(documentId);
     }
 
 }
