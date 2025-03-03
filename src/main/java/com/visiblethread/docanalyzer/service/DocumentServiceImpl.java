@@ -116,6 +116,9 @@ public class DocumentServiceImpl implements DocumentService {
         if(response == null) {
             throw new DocAnalyzerException(HttpStatus.INTERNAL_SERVER_ERROR, "Error getting Gemini response");
         }
-        return Arrays.asList(response.split(",\\s*"));
+        return Arrays.stream(response.split(",\\s*"))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
     }
 }
